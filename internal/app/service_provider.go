@@ -9,6 +9,7 @@ import (
 	clientCfg "github.com/VadimGossip/extRoutingClientTester/internal/config/client"
 	"github.com/VadimGossip/extRoutingClientTester/internal/repository"
 	postReqRepo "github.com/VadimGossip/extRoutingClientTester/internal/repository/post_request"
+	testRepo "github.com/VadimGossip/extRoutingClientTester/internal/repository/test"
 	"github.com/VadimGossip/extRoutingClientTester/internal/service"
 	eventService "github.com/VadimGossip/extRoutingClientTester/internal/service/event"
 	postCacheService "github.com/VadimGossip/extRoutingClientTester/internal/service/post_cache"
@@ -25,6 +26,7 @@ type serviceProvider struct {
 	postroutingClient     postrouting.Client
 
 	postReqRepo repository.PostroutingRequestRepository
+	testRepo    repository.TestRepository
 
 	testService        service.TestService
 	eventService       service.EventService
@@ -72,9 +74,16 @@ func (s *serviceProvider) PostroutingRequestRepository() repository.PostroutingR
 	return s.postReqRepo
 }
 
+func (s *serviceProvider) TestRepository() repository.TestRepository {
+	if s.testRepo == nil {
+		s.testRepo = testRepo.NewRepository()
+	}
+	return s.testRepo
+}
+
 func (s *serviceProvider) TestService() service.TestService {
 	if s.testService == nil {
-		s.testService = testService.NewService()
+		s.testService = testService.NewService(s.TestRepository())
 	}
 	return s.testService
 }

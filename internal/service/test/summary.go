@@ -3,30 +3,31 @@ package test
 import (
 	"time"
 
+	"github.com/VadimGossip/extRoutingClientTester/internal/service/test/model"
 	"github.com/VadimGossip/extRoutingClientTester/pkg/ema"
 	"github.com/VadimGossip/extRoutingClientTester/pkg/util"
 )
 
 func (s *service) AddDurationToSummary(taskId int64, dur time.Duration) {
 	if testTask, ok := s.tasks[taskId]; ok {
-		testTask.summary.mu.Lock()
-		defer testTask.summary.mu.Unlock()
+		testTask.Summary.Mu.Lock()
+		defer testTask.Summary.Mu.Unlock()
 		var durInit bool
-		if testTask.summary.duration == nil {
-			testTask.summary.duration = &durationSummary{
-				ema:       ema.NewEMA(0.01),
-				histogram: make(map[float64]int),
+		if testTask.Summary.Duration == nil {
+			testTask.Summary.Duration = &model.DurationSummary{
+				Ema:       ema.NewEMA(0.01),
+				Histogram: make(map[float64]int),
 			}
 			durInit = true
 		}
 
-		if testTask.summary.duration.min > dur || durInit {
-			testTask.summary.duration.min = dur
+		if testTask.Summary.Duration.Min > dur || durInit {
+			testTask.Summary.Duration.Min = dur
 		}
-		if testTask.summary.duration.max < dur || durInit {
-			testTask.summary.duration.max = dur
+		if testTask.Summary.Duration.Max < dur || durInit {
+			testTask.Summary.Duration.Max = dur
 		}
-		testTask.summary.duration.ema.Add(float64(dur.Nanoseconds()))
-		testTask.summary.duration.histogram[(util.RoundFloat(float64(dur.Milliseconds()/100), 0)*100)+100]++
+		testTask.Summary.Duration.Ema.Add(float64(dur.Nanoseconds()))
+		testTask.Summary.Duration.Histogram[(util.RoundFloat(float64(dur.Milliseconds()/100), 0)*100)+100]++
 	}
 }

@@ -1,0 +1,7 @@
+[
+  {"total": 10000, "rps":  100, "pps": 20, "max_workers": 10},
+  {"total": 10000, "rps":  1000, "pps": 20, "max_workers": 10},
+  {"total": 10000, "rps":  1000, "pps": 20, "max_workers": 20},
+  {"total": 10000, "rps":  2500, "pps": 30, "max_workers": 10},
+  {"total": 10000, "rps":  2500, "pps": 30, "max_workers": 20}
+]

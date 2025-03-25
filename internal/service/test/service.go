@@ -1,37 +1,15 @@
 package test
 
 import (
-	"sync"
-	"time"
-
-	"github.com/VadimGossip/drs_storage_tester/pkg/util"
+	"github.com/VadimGossip/extRoutingClientTester/internal/repository"
+	"github.com/VadimGossip/extRoutingClientTester/internal/service/test/model"
 )
 
-type durationSummary struct {
-	max       time.Duration
-	min       time.Duration
-	ema       util.EMA
-	histogram map[float64]int
-}
-
-type summary struct {
-	total    int
-	mu       sync.RWMutex
-	duration *durationSummary
-}
-
-type task struct {
-	requestsPerSec int
-	packPerSec     int
-	summary        *summary
-}
-
 type service struct {
-	mu     sync.Mutex
-	tasks  map[int64]*task
-	lastId int64
+	repoTest repository.TestRepository
+	tasks    map[int64]*model.TestTask
 }
 
-func NewService() *service {
-	return &service{tasks: map[int64]*task{}}
+func NewService(repoTest repository.TestRepository) *service {
+	return &service{repoTest: repoTest, tasks: map[int64]*model.TestTask{}}
 }

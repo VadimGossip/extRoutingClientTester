@@ -21,7 +21,7 @@ type PostroutingService interface {
 }
 
 type TestService interface {
-	CreateTestTask(total, rps, pps int) int64
+	GetTestTasks() ([]model.TestTask, error)
 	AddDurationToSummary(taskId int64, dur time.Duration)
 	Print(taskId int64)
 }
